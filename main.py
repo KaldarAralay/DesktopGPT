@@ -3,14 +3,21 @@ ChatGPT Desktop App
 A lightweight, efficient desktop application for accessing ChatGPT.
 """
 
-import webview
 import sys
+from pathlib import Path
+
+# Create user data directory for persistent storage
+user_data_dir = Path.home() / '.chatgpt-desktop'
+user_data_dir.mkdir(exist_ok=True)
+
+import webview
 
 
 class ChatGPTApp:
     def __init__(self):
         self.window = None
         self.chatgpt_url = "https://chat.openai.com"
+        self.storage_path = str(user_data_dir)
         
     def create_window(self):
         """Create the main application window"""
@@ -32,10 +39,9 @@ class ChatGPTApp:
         # Create the webview window
         self.window = webview.create_window(**window_config)
         
-        # Inject custom CSS after page loads for better styling
+        # Inject custom CSS after page loads
         def on_loaded():
             try:
-                # Inject custom CSS to improve the ChatGPT interface
                 css = """
                     html, body {
                         margin: 0;
@@ -47,7 +53,6 @@ class ChatGPTApp:
                         scroll-behavior: smooth;
                     }
                 """
-                # Escape the CSS for JavaScript
                 css_escaped = css.replace('\\', '\\\\').replace('`', '\\`').replace('$', '\\$')
                 js_code = f"""
                     (function() {{
@@ -58,7 +63,6 @@ class ChatGPTApp:
                 """
                 self.window.evaluate_js(js_code)
             except Exception:
-                # Silently fail if injection doesn't work
                 pass
         
         # Set up event handlers
@@ -69,7 +73,14 @@ class ChatGPTApp:
         """Start the application"""
         try:
             self.create_window()
-            webview.start(debug=False)
+            # Start webview with persistent storage
+            # private_mode=False allows cookies/localStorage to persist
+            # storage_path sets where the data is stored
+            webview.start(
+                debug=False,
+                private_mode=False,
+                storage_path=self.storage_path
+            )
         except KeyboardInterrupt:
             print("\nApplication closed by user.")
             sys.exit(0)

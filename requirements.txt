@@ -1,2 +1,4 @@
 pywebview>=5.0.0
+# Note: On Windows, Edge WebView2 should automatically persist cookies
+# If cookies don't persist, try upgrading: pip install --upgrade pywebview
 

@@ -9,6 +9,7 @@ A lightweight, efficient desktop application for accessing ChatGPT. Built with P
 - 🔒 Secure connection to ChatGPT
 - 💻 Native desktop application
 - ⚡ Fast startup and performance
+- 💾 Persistent login - stays logged in between sessions
 
 ## Requirements
 
@@ -31,6 +32,8 @@ python main.py
 ```
 
 The app will open a window connecting directly to ChatGPT. Simply log in and start chatting!
+
+**Note**: Your login session is automatically saved. You'll stay logged in even after closing and reopening the app. Session data is stored securely in your user directory (`~/.chatgpt-desktop`).
 
 ## Technical Details
 
